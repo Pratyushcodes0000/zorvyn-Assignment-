@@ -105,7 +105,7 @@ All summary APIs compute **aggregated values**, not raw data.
 ### 1.Clone the repository
 
 ```bash
-git clone <your-repo-link>
+git clone https://github.com/Pratyushcodes0000/zorvyn-Assignment-.git
 cd finance-dashboard-backend
 ```
 
@@ -126,12 +126,28 @@ Create a `.env` file:
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret
+KEY=1234567890
 ```
 
 ---
 
-### 4. Run the server
+### 4. Seed Data 
+
+Run the following to create test users:
+
+```bash
+node seed.js
+```
+
+Available users:
+
+admin@test.com → ADMIN  
+analyst@test.com → ANALYST  
+viewer@test.com → VIEWER
+
+---
+
+### 5. Run the server
 
 ```bash
 npm run dev
