@@ -260,7 +260,6 @@ GET /summary/monthly-trends
 
 ## Future Improvements
 
-- Pagination for records
 - Search functionality
 - Rate limiting
 - Unit & integration tests
