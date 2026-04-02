@@ -93,8 +93,10 @@ exports.createRecord = async (req, res) => {
 
 exports.getRecords = async (req, res) => {
   try {
+    const { page = 1, limit = 10 } = req.query;
     const { type, category, startDate, endDate } = req.query;
     let filter = {};
+    const skip = (page - 1) * limit;
 
     // Rolebased filtering
     if (req.user.role !== "ADMIN") {
@@ -122,11 +124,20 @@ exports.getRecords = async (req, res) => {
     }
 
     //sorting date newest to oldest
-    const records = await Record.find(filter).sort({ date: -1 });
+    const records = await Record.find(filter)
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    //counting document for frontend
+    const total = await Record.countDocuments(filter);
 
     return res.status(200).json({
       success: true,
-      count: records.length,
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      totalPages: Math.ceil(total / limit),
       data: records,
     });
   } catch (error) {
