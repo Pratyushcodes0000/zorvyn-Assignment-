@@ -47,6 +47,11 @@ The records API supports pagination to efficiently handle large datasets.
 ➤ Endpoint
 GET /records?page=2&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-01
 
+## Rate Limiting
+
+API is protected using rate limiting to prevent abuse.
+
+- To keep things simple applied a global rate limiting with a 10 min window and max of 100 attempts 
 
 ### Dashboard Summary APIs
 
@@ -237,7 +242,7 @@ GET /summary/monthly-trends
 
 ## Design Decisions
 
-- Used custom `recordId` instead of Mongo `_id` for business-level identification
+- Used custom `recordId` instead of Mongo `_id` for business level identification
 - Implemented soft delete for safe data handling
 - Used aggregation pipelines for summary APIs
 - Role-based filtering handled at query level (not route level)
@@ -247,7 +252,6 @@ GET /summary/monthly-trends
 ## Assumptions
 
 - Analysts are treated similar to viewers for data visibility (can be extended)
-- No pagination added (can be implemented easily)
 - Authentication is JWT-based (no refresh tokens)
 
 ---
@@ -261,7 +265,6 @@ GET /summary/monthly-trends
 ## Future Improvements
 
 - Search functionality
-- Rate limiting
 - Unit & integration tests
 - Swagger API documentation
 
