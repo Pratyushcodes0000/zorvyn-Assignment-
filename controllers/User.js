@@ -13,14 +13,14 @@ exports.createUser = async (req, res) => {
         message: "Empty name or email field",
       });
     }
-    //verifying email
-    const isValid = await validate(email);
-    if (!isValid.valid) {
-      return res.status(400).json({
-        success: false,
-        message: "Enter a valid email",
-      });
-    }
+    // //verifying email
+    // const isValid = await validate(email);
+    // if (!isValid.valid) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Enter a valid email",
+    //   });
+    // }
     //check role
     const normalizedRole = role?.toUpperCase();
     const allowedRoles = User.schema.path("role").enumValues;
