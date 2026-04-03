@@ -93,6 +93,13 @@ All summary APIs compute **aggregated values**, not raw data.
 - Clean error responses
 
 ---
+## Swagger Api doc
+
+-First generate a token using postman(steps below) and then click on authorize and paste the key to test on swagger
+
+- Swagger URL: https://zorvyn-assignment-znz8.onrender.com/api-docs
+
+---
 
 ##  Test with preloaded dataset.No manual testing req
 
@@ -402,15 +409,9 @@ Example - /api/summary/monthly-trend?startDate=2024-01-01&endDate=2024-03-31
 
 ---
 
-## Swagger Api doc
-
-- Swagger URL: https://zorvyn-assignment-znz8.onrender.com/api-docs
-
----
 
 ## Future Improvements
 - Unit & integration tests
-- Swagger API documentation
 ---
 
 ## Conclusion
