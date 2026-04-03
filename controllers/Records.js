@@ -211,7 +211,7 @@ exports.updateRecords = async (req, res) => {
     const userId = req.user.user_id;
     const userRole = req.user.role;
     const { amount, type, category, date, notes } = req.body;
-    const parsedAmount = parseInt(amount)
+    const parsedAmount = parseInt(amount);
 
     //checking recordId
     if (isNaN(recordId)) {
@@ -336,14 +336,19 @@ exports.deleteRecords = async (req, res) => {
         message: "You dont have permission to delete this record",
       });
     }
-
-    r.isDeleted = !r.isDeleted;
-    await r.save();
-
-    return res.status(200).json({
-      success: true,
-      message: "Doc soft deleted successfully",
-    });
+    if (r.isDeleted == false) {
+      r.isDeleted = !r.isDeleted;
+      await r.save();
+      return res.status(200).json({
+        success: true,
+        message: "Doc soft deleted successfully",
+      });
+    } else {
+      return res.status(200).json({
+        success: false,
+        message: "Doc already soft deleted successfully",
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       success: false,
