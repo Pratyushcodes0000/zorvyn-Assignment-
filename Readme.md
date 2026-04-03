@@ -402,6 +402,12 @@ Example - /api/summary/monthly-trend?startDate=2024-01-01&endDate=2024-03-31
 
 ---
 
+## Swagger Api doc
+
+- Swagger URL: https://zorvyn-assignment-znz8.onrender.com/api-docs
+
+---
+
 ## Future Improvements
 - Unit & integration tests
 - Swagger API documentation

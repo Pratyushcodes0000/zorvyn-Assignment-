@@ -2,6 +2,8 @@ const express = require("express");
 const http = require("http");
 const connectDB = require("./db/db");
 const apiLimiter = require('./middleware/rateLimiter')
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 const app = express();
 const server = http.createServer(app);
 
@@ -13,6 +15,8 @@ connectDB();
 app.use(apiLimiter) // global simple rate limiter(could be applied per route too)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// Swagger route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //imports here
 const user = require("./routes/User");
@@ -27,4 +31,5 @@ app.use("/api", Dashboard);
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Running on http://localhost:${PORT}`);
+  console.log(`Swagger docs at http://localhost:${PORT}/api-docs`);
 });
