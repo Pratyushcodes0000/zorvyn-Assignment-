@@ -196,7 +196,7 @@ Authorization: Bearer <token>
 - `POST /records` → Create record (Admin)
 - `GET /records` → Get records
 ```
-Example - GET GET /records?page=1&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-31&search=lunch
+Example - GET /records?page=1&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-31&search=lunch
 ```
 - `GET /records/:id` → Get single record
 - `PATCH /records/:id` → Update record
