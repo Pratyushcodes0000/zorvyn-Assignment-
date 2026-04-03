@@ -211,6 +211,7 @@ exports.updateRecords = async (req, res) => {
     const userId = req.user.user_id;
     const userRole = req.user.role;
     const { amount, type, category, date, notes } = req.body;
+    const parsedAmount = parseInt(amount)
 
     //checking recordId
     if (isNaN(recordId)) {
@@ -242,13 +243,13 @@ exports.updateRecords = async (req, res) => {
     let updateData = {};
 
     if (amount !== undefined) {
-      if (typeof amount !== "number" || amount <= 0) {
+      if (typeof parsedAmount !== "number" || parsedAmount <= 0) {
         return res.status(400).json({
           success: false,
           message: "Invalid amount",
         });
       }
-      updateData.amount = amount;
+      updateData.amount = parsedAmount;
     }
 
     if (type !== undefined) {
