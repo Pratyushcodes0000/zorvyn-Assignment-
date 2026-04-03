@@ -272,7 +272,7 @@ GET /summary/monthly-trends
 
 ## Deployment
 
-- API Base URL: `<your-deployed-link>`
+- API Base URL: https://zorvyn-assignment-znz8.onrender.com
 
 ---
 
