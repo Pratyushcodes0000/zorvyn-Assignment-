@@ -8,7 +8,7 @@ exports.createUser = async (req, res) => {
   try {
     const { name, email, role } = req.body;
     if (!name || !email) {
-      return res.status(400).status({
+      return res.status(400).json({
         success: false,
         message: "Empty name or email field",
       });
@@ -22,8 +22,9 @@ exports.createUser = async (req, res) => {
       });
     }
     //check role
+    const normalizedRole = role?.toUpperCase();
     const allowedRoles = User.schema.path("role").enumValues;
-    if (role && !allowedRoles.includes(role)) {
+    if (role && !allowedRoles.includes(normalizedRole)) {
       return res.status(400).json({
         success: false,
         message: "Invalid role",
@@ -32,7 +33,7 @@ exports.createUser = async (req, res) => {
 
     let user = await User.findOne({ email: email });
     if (user) {
-      return res.json({
+      return res.status(409).json({
         message: "user already exist",
       });
     }
@@ -41,11 +42,12 @@ exports.createUser = async (req, res) => {
       user_id: id,
       name: name,
       email: email,
-      role: role,
+       ...(role && {role}),
     };
-
+    
+    let savedUser;
     try {
-      await User.create(user);
+     savedUser =  await User.create(user);
     } catch (error) {
       return res.status(409).json({
         success: false,
@@ -53,9 +55,16 @@ exports.createUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(user, key, {
+    const payload = {
+      user_id:savedUser.user_id,
+      email:savedUser.email,
+      role:savedUser.role
+    }
+
+    const token = jwt.sign(payload, process.env.KEY, {
       expiresIn: "168h",
     });
+    
     return res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -118,7 +127,7 @@ exports.getUsers = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { userId } = parseInt(req.params.id);
+    const userId = parseInt(req.params.id);
     const { role, isActive } = req.body;
 
     let updateFields = {};
@@ -157,13 +166,10 @@ exports.updateUser = async (req, res) => {
     // $set beacuse we dont want to override whole doc
     //new -> return updated doc
     // runValidators -> enforce schema rules
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
+    const updatedUser = await User.findOneAndUpdate(
+      { user_id: userId },
       { $set: updateFields },
-      {
-        new: true,
-        runValidators: true,
-      },
+      { new: true },
     );
 
     if (!updatedUser) {
@@ -191,11 +197,10 @@ exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findByIdAndUpdate(
-      id,
+    const user = await User.findOneAndUpdate(
+      {user_id:id},
       { $set: { isActive: false } }, //soft delete not deleting record
-      { new: true },
-    );
+      );
 
     if (!user) {
       return res.status(404).json({
@@ -243,23 +248,22 @@ exports.login = async (req, res) => {
         message: "User is inactive",
       });
     }
-    
-    const payload = {
-      user_id:user.user_id,
-      name:user.name,
-      email:user.email,
-      role:user.role
-    }
 
-    const token = jwt.sign(payload,process.env.KEY,{
-      expiresIn:"1d"
-    })
+    const payload = {
+      user_id: user.user_id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+    const token = jwt.sign(payload, process.env.KEY, {
+      expiresIn: "1d",
+    });
 
     return res.status(200).json({
-      success:true,
-      token
-    })
-
+      success: true,
+      token,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,

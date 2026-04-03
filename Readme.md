@@ -45,7 +45,20 @@ A sample .env file is provided for demonstration purpose only
 The records API supports pagination to efficiently handle large datasets.
 
 ➤ Endpoint
-GET /records?page=2&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-01
+GET /records?page=2&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-01&search=lunch
+
+##  Search Support
+
+The records API supports text-based search.
+
+Example:
+GET /records?search=food
+
+Search is applied on:
+- category
+- notes
+
+Search is case-insensitive and can be combined with filters.
 
 ## Rate Limiting
 

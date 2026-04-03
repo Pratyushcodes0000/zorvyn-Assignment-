@@ -6,8 +6,9 @@ exports.createRecord = async (req, res) => {
   try {
     const user_id = req.user.user_id;
     const { amount, type, category, date, notes } = req.body;
+    const parsedamount = parseInt(amount);
 
-    if (!amount || !type || !category || !date) {
+    if (!parsedamount || !type || !category || !date) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
@@ -15,7 +16,7 @@ exports.createRecord = async (req, res) => {
     }
 
     //validating amount
-    if (typeof amount !== "number" || amount <= 0) {
+    if (isNaN(parsedamount) || parsedamount <= 0) {
       return res.status(400).json({
         success: false,
         message: "Amount cannot be negative or zero",
@@ -63,7 +64,7 @@ exports.createRecord = async (req, res) => {
     const Rec = {
       userId: user_id,
       recordId: generateId(),
-      amount: amount,
+      amount: parsedamount,
       type: normType,
       category,
       date: parsedDate,
@@ -95,7 +96,10 @@ exports.getRecords = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const { type, category, startDate, endDate } = req.query;
-    let filter = {};
+    const { search } = req.query;
+    let filter = {
+      isDeleted: false,
+    };
     const skip = (page - 1) * limit;
 
     // Rolebased filtering
@@ -121,6 +125,13 @@ exports.getRecords = async (req, res) => {
       if (endDate) {
         filter.date.$lte = new Date(endDate);
       }
+    }
+    //serach filter
+    if (search) {
+      filter.$or = [
+        { category: { $regex: search, $options: "i" } },
+        { notes: { $regex: search, $options: "i" } },
+      ];
     }
 
     //sorting date newest to oldest
@@ -181,12 +192,12 @@ exports.getRecordswithId = async (req, res) => {
       });
     }
 
-    return res.status(500).json({
+    return res.status(200).json({
       success: true,
       record: r,
     });
   } catch (error) {
-    return res.status(200).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to fetch record",
       error: error.message,
@@ -300,6 +311,13 @@ exports.deleteRecords = async (req, res) => {
     const recordId = parseInt(req.params.id);
     const userId = req.user.user_id;
     const userRole = req.user.role;
+
+    if (isNaN(recordId) || !recordId) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid record ID",
+      });
+    }
 
     //fetch record
     const r = await Record.findOne({ recordId: recordId });

@@ -22,6 +22,7 @@ const RecordSchema = new m.Schema({
   category: {
     type: String,
     required: false,
+    index:true
   },
   date: {
     type: Date,
@@ -30,6 +31,7 @@ const RecordSchema = new m.Schema({
   notes: {
     type: String,
     required: false,
+    index:true
   },
   isDeleted:{
     type:Boolean,

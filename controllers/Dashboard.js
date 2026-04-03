@@ -7,7 +7,7 @@ exports.getTotalIncome = async (req, res) => {
       isDeleted: false,
     };
 
-    if (req.user.role === "VIEWER") {
+    if (req.user.role !== "ADMIN") {
       baseFilter.userId = req.user.user_id;
     }
 
@@ -56,7 +56,7 @@ exports.getTotalExpense = async (req, res) => {
       isDeleted: false,
     };
 
-    if (req.user.role === "VIEWER") {
+    if (req.user.role !== "ADMIN") {
       baseFilter.userId = req.user.user_id;
     }
 
