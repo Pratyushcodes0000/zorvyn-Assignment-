@@ -51,7 +51,8 @@ GET /records?page=2&limit=5&type=expense&category=food&startDate=2024-01-01&endD
 
 API is protected using rate limiting to prevent abuse.
 
-- To keep things simple applied a global rate limiting with a 10 min window and max of 100 attempts 
+- To keep things simple applied a global rate limiting with a 10 min window and max of 100 attempts
+- Used express-rate-limiting to apply rate limiting fast 
 
 ### Dashboard Summary APIs
 
