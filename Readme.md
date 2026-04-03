@@ -194,7 +194,10 @@ Authorization: Bearer <token>
 ### Records
 
 - `POST /records` → Create record (Admin)
-- `GET /records` → Get records (filtered)
+- `GET /records` → Get records
+```
+Example - GET GET /records?page=1&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-31&search=lunch
+```
 - `GET /records/:id` → Get single record
 - `PATCH /records/:id` → Update record
 - `DELETE /records/:id` → Soft delete
@@ -226,11 +229,18 @@ GET /summary/net-balance
 ```
 GET /summary/category-breakdown
 ```
+```
+EXAMPLE - /summary/category-breakdown?startDate=2024-01-01&endDate=2024-03-31
+```
 
 #### Recent Transactions
 
 ```
-GET /summary/recent-transactions?limit=5
+GET /summary/recent-transaction
+```
+
+```
+EXAMPLE - /summary/recent-transactions?limit=6
 ```
 
 #### Monthly Trends
@@ -239,17 +249,36 @@ GET /summary/recent-transactions?limit=5
 GET /summary/monthly-trends
 ```
 
+```
+Example - /summary/monthly-trend?startDate=2024-01-01&endDate=2024-03-31
+```
+
 ## Example Response (Monthly Trends)
 
 ```json
-[
-  {
-    "year": 2024,
-    "month": 1,
-    "income": 20000,
-    "expense": 8000
-  }
-]
+{
+    "success": true,
+    "data": [
+        {
+            "year": 2024,
+            "month": 1,
+            "income": 30000,
+            "expense": 5500
+        },
+        {
+            "year": 2024,
+            "month": 2,
+            "income": 37000,
+            "expense": 1000
+        },
+        {
+            "year": 2024,
+            "month": 3,
+            "income": 35000,
+            "expense": 4900
+        }
+    ]
+}
 ```
 
 ---
