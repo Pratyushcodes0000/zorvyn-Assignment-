@@ -3,7 +3,7 @@ const User = require("./models/User");
 require('dotenv').config()
 
 async function seedUsers() {
-  await mongoose.connect(process.env.MONGO_URI);
+  await mongoose.connect(process.env.MONGODB_URI);
 
   await User.deleteMany({});
 

@@ -277,11 +277,8 @@ GET /summary/monthly-trends
 ---
 
 ## Future Improvements
-
-- Search functionality
 - Unit & integration tests
 - Swagger API documentation
-
 ---
 
 ## Conclusion
