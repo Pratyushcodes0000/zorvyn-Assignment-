@@ -45,14 +45,14 @@ A sample .env file is provided for demonstration purpose only
 The records API supports pagination to efficiently handle large datasets.
 
 ➤ Endpoint
-GET /records?page=2&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-01&search=lunch
+GET /api/records?page=2&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-01&search=lunch
 
 ##  Search Support
 
 The records API supports text-based search.
 
 Example:
-GET /records?search=food
+GET /api/records?search=food
 
 Search is applied on:
 - category
@@ -71,12 +71,12 @@ API is protected using rate limiting to prevent abuse.
 
 All summary APIs compute **aggregated values**, not raw data.
 
-- `GET /summary/total-income`
-- `GET /summary/total-expense`
-- `GET /summary/net-balance`
-- `GET /summary/category-breakdown`
-- `GET /summary/recent-transactions`
-- `GET /summary/monthly-trends`
+- `GET /api/summary/total-income`
+- `GET /api/summary/total-expense`
+- `GET /api/summary/net-balance`
+- `GET /api/summary/category-breakdown`
+- `GET /api/summary/recent-transactions`
+- `GET /api/summary/monthly-trends`
 
 ### Access Control
 
@@ -93,6 +93,103 @@ All summary APIs compute **aggregated values**, not raw data.
 - Clean error responses
 
 ---
+
+##  Test with preloaded dataset.No manual testing req
+
+The database already contains sample financial records for testing.
+
+---
+
+### 📌 Available Test User
+
+You can use the following user to test all APIs:
+
+```json
+{
+  "email": "admin@test.com"
+}
+```
+
+---
+
+### 🚀 Step 1: Login
+
+```http
+POST /api/auth/login
+```
+
+Body:
+
+```json
+{
+  "email": "admin@test.com"
+}
+```
+
+👉 This will return a JWT token.
+
+---
+
+### Step 2: Add Token
+
+Include the token in all requests:
+
+```http
+Authorization: Bearer <your_token>
+```
+
+---
+
+### 📊 Step 3: Test APIs Directly
+
+The database already contains **15+ financial records** for this user.
+
+You can directly test:
+
+#### 🔹 Get All Records
+
+```http
+GET /api/records?page=1&limit=100
+```
+
+---
+
+#### 🔹 Filtered Records
+
+```http
+GET /api/records?type=expense&category=food
+```
+
+---
+
+#### 🔹 Search
+
+```http
+GET /api/records?search=food
+```
+
+---
+
+#### 🔹 Summary APIs
+
+```http
+GET /api/summary/total-income
+GET /api/summary/total-expense
+GET /api/summary/net-balance
+GET /api/summary/category-breakdown
+GET /api/summary/monthly-trends
+```
+
+---
+
+###  Notes
+
+* No need to manually insert records
+* Data includes multiple categories, dates, and types
+* Suitable for testing pagination, filtering, search, and aggregation
+
+
+
 
 ## Tech Stack
 
@@ -183,24 +280,24 @@ Authorization: Bearer <token>
 
 ### Users
 
-- `POST /user` → Create user (Admin)
-- `GET /user` → Get users
-- `PATCH /user/:id` → Update user
-- `DELETE /user/:id` → Deactivate user
-- `POST /auth/login` → Token issue
+- `POST /api/user` → Create user (Admin)
+- `GET /api/user` → Get users
+- `PATCH /api/user/:id` → Update user
+- `DELETE /api/user/:id` → Deactivate user
+- `POST /api/auth/login` → Token issue
 
 ---
 
 ### Records
 
-- `POST /records` → Create record (Admin)
-- `GET /records` → Get records
+- `POST /api/records` → Create record (Admin)
+- `GET /api/records` → Get records
 ```
 Example - GET /records?page=1&limit=5&type=expense&category=food&startDate=2024-01-01&endDate=2024-03-31&search=lunch
 ```
-- `GET /records/:id` → Get single record
-- `PATCH /records/:id` → Update record
-- `DELETE /records/:id` → Soft delete
+- `GET /api/records/:id` → Get single record
+- `PATCH /api/records/:id` → Update record
+- `DELETE /api/records/:id` → Soft delete
 
 ---
 
@@ -209,48 +306,48 @@ Example - GET /records?page=1&limit=5&type=expense&category=food&startDate=2024-
 #### Total Income
 
 ```
-GET /summary/total-income
+GET /api/summary/total-income
 ```
 
 #### Total Expense
 
 ```
-GET /summary/total-expense
+GET /api/summary/total-expense
 ```
 
 #### Net Balance
 
 ```
-GET /summary/net-balance
+GET /api/summary/net-balance
 ```
 
 #### Category Breakdown
 
 ```
-GET /summary/category-breakdown
+GET /api/summary/category-breakdown
 ```
 ```
-EXAMPLE - /summary/category-breakdown?startDate=2024-01-01&endDate=2024-03-31
+EXAMPLE - /api/summary/category-breakdown?startDate=2024-01-01&endDate=2024-03-31
 ```
 
 #### Recent Transactions
 
 ```
-GET /summary/recent-transaction
+GET /api/summary/recent-transaction
 ```
 
 ```
-EXAMPLE - /summary/recent-transactions?limit=6
+EXAMPLE - /api/summary/recent-transactions?limit=6
 ```
 
 #### Monthly Trends
 
 ```
-GET /summary/monthly-trends
+GET /api/summary/monthly-trends
 ```
 
 ```
-Example - /summary/monthly-trend?startDate=2024-01-01&endDate=2024-03-31
+Example - /api/summary/monthly-trend?startDate=2024-01-01&endDate=2024-03-31
 ```
 
 ## Example Response (Monthly Trends)
